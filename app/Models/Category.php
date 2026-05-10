@@ -1,57 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use App\Models\Item;
-use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 
-class ItemController extends Controller
+class Category extends Model
 {
-    public function index()
+    protected $fillable = [
+        'name'
+    ];
+
+    public function items()
     {
-        $items = Item::with('category')->get();
-
-        return view('items.index', compact('items'));
-    }
-
-    public function create()
-    {
-        $categories = Category::all();
-
-        return view('items.create', compact('categories'));
-    }
-
-    public function store(Request $request)
-    {
-        Item::create($request->all());
-
-        return redirect()->route('items.index');
-    }
-
-    public function show(Item $item)
-    {
-        return view('items.show', compact('item'));
-    }
-
-    public function edit(Item $item)
-    {
-        $categories = Category::all();
-
-        return view('items.edit', compact('item', 'categories'));
-    }
-
-    public function update(Request $request, Item $item)
-    {
-        $item->update($request->all());
-
-        return redirect()->route('items.index');
-    }
-
-    public function destroy(Item $item)
-    {
-        $item->delete();
-
-        return redirect()->route('items.index');
+        return $this->hasMany(Item::class);
     }
 }
