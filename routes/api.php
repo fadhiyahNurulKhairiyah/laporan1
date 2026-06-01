@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
 
 // Route publik
 Route::post('register', 'App\Http\Controllers\AuthController@register');
@@ -26,3 +27,10 @@ Route::middleware('auth:sanctum')->group(function () {
          ->middleware('role:admin');
 
 });
+=======
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ItemController;
+
+Route::apiResource('categories', CategoryController::class);
+Route::apiResource('items', ItemController::class);
+>>>>>>> origin/main
