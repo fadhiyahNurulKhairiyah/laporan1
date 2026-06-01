@@ -2,6 +2,28 @@
 
 namespace App\Models;
 
+<<<<<<< HEAD
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;  // ← tambahkan ini
+
+class User extends Authenticatable
+{
+    use HasApiTokens, Notifiable;  // ← tambahkan HasApiTokens
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',      // ← tambahkan role
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+}
+=======
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -30,3 +52,4 @@ class User extends Authenticatable
         ];
     }
 }
+>>>>>>> origin/main
