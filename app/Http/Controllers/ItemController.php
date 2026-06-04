@@ -2,66 +2,86 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\BaseController;
+use App\Http\Request\StoreItemRequest;
+use App\Http\Request\UpdateItemRequest;
 use App\Models\Item;
-use Illuminate\Http\Request;
 
-class ItemController extends Controller
+class ItemController extends BaseController
 {
-<<<<<<< HEAD
-    public function index() {
-        return response()->json(['status' => 'success', 'data' => Item::all()]);
-    }
-
-    public function store(Request $request) {
-        $validated = $request->validate([
-            'name'        => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'stock'       => 'required|integer',
-            'price'       => 'required|numeric',
-        ]);
-        $item = Item::create($validated);
-        return response()->json(['status' => 'success', 'data' => $item], 201);
-    }
-
-    public function show(Item $item) {
-        return response()->json(['status' => 'success', 'data' => $item]);
-    }
-
-    public function update(Request $request, Item $item) {
-        $item->update($request->all());
-        return response()->json(['status' => 'success', 'data' => $item]);
-    }
-
-    public function destroy(Item $item) {
-        $item->delete();
-        return response()->json(['status' => 'success', 'data' => null], 200);
-=======
     public function index()
     {
-        return Item::with('category')->get();
+        $items = Item::with('category')->get();
+
+        return $this->success(
+            $items,
+            'Data item berhasil diambil'
+        );
     }
 
-    public function store(Request $request)
+    public function store(StoreItemRequest $request)
     {
-        return Item::create($request->all());
+        $item = Item::create($request->validated());
+
+        return $this->success(
+            $item,
+            'Item berhasil dibuat',
+            201
+        );
     }
 
-    public function show(string $id)
+    public function show($id)
     {
-        return Item::findOrFail($id);
+        $item = Item::with('category')->find($id);
+
+        if (!$item) {
+            return $this->error(
+                'Item tidak ditemukan',
+                404
+            );
+        }
+
+        return $this->success(
+            $item,
+            'Detail item berhasil diambil'
+        );
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateItemRequest $request, $id)
     {
-        $item = Item::findOrFail($id);
-        $item->update($request->all());
+        $item = Item::find($id);
 
-        return $item;
+        if (!$item) {
+            return $this->error(
+                'Item tidak ditemukan',
+                404
+            );
+        }
+
+        $item->update($request->validated());
+
+        return $this->success(
+            $item,
+            'Item berhasil diperbarui'
+        );
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        return Item::destroy($id);
->>>>>>> origin/main
+        $item = Item::find($id);
+
+        if (!$item) {
+            return $this->error(
+                'Item tidak ditemukan',
+                404
+            );
+        }
+
+        $item->delete();
+
+        return $this->success(
+            null,
+            'Item berhasil dihapus'
+        );
     }
 }

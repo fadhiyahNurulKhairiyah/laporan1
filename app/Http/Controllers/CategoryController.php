@@ -2,86 +2,86 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-=======
+use App\Http\Controllers\Api\BaseController;
+use App\Http\Request\StoreCategoryRequest;
+use App\Http\Request\UpdateCategoryRequest;
 use App\Models\Category;
->>>>>>> origin/main
-use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class CategoryController extends BaseController
 {
-<<<<<<< HEAD
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $categories = Category::all();
+
+        return $this->success(
+            $categories,
+            'Data kategori berhasil diambil'
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        //
+        $category = Category::create($request->validated());
+
+        return $this->success(
+            $category,
+            'Kategori berhasil dibuat',
+            201
+        );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->error(
+                'Kategori tidak ditemukan',
+                404
+            );
+        }
+
+        return $this->success(
+            $category,
+            'Detail kategori berhasil diambil'
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoryRequest $request, $id)
     {
-        //
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->error(
+                'Kategori tidak ditemukan',
+                404
+            );
+        }
+
+        $category->update($request->validated());
+
+        return $this->success(
+            $category,
+            'Kategori berhasil diperbarui'
+        );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->error(
+                'Kategori tidak ditemukan',
+                404
+            );
+        }
+
+        $category->delete();
+
+        return $this->success(
+            null,
+            'Kategori berhasil dihapus'
+        );
     }
 }
-=======
-    public function index()
-    {
-        return Category::all();
-    }
-
-    public function store(Request $request)
-    {
-        return Category::create($request->all());
-    }
-
-    public function show(string $id)
-    {
-        return Category::findOrFail($id);
-    }
-
-    public function update(Request $request, string $id)
-    {
-        $category = Category::findOrFail($id);
-        $category->update($request->all());
-
-        return $category;
-    }
-
-    public function destroy(string $id)
-    {
-        Category::destroy($id);
-
-        return response()->json([
-            'message' => 'Deleted Successfully'
-        ]);
-    }
-}
->>>>>>> origin/main
