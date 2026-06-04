@@ -1,36 +1,33 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
 
-// Route publik
-Route::post('register', 'App\Http\Controllers\AuthController@register');
-Route::post('login',    'App\Http\Controllers\AuthController@login');
+Route::prefix('v1')->group(function () {
 
-// Route yang membutuhkan login (token Sanctum)
-Route::middleware('auth:sanctum')->group(function () {
+    Route::post('register',
+        'App\Http\Controllers\AuthController@register');
 
-    // Categories — semua kecuali delete
-    Route::apiResource('categories', 'App\Http\Controllers\CategoryController')
-         ->except(['destroy']);
-    // Delete categories — hanya admin
-    Route::delete('categories/{category}',
-        'App\Http\Controllers\CategoryController@destroy')
-         ->middleware('role:admin');
+    Route::post('login',
+        'App\Http\Controllers\AuthController@login');
 
-    // Items — semua kecuali delete
-    Route::apiResource('items', 'App\Http\Controllers\ItemController')
-         ->except(['destroy']);
-    // Delete items — hanya admin
-    Route::delete('items/{item}',
-        'App\Http\Controllers\ItemController@destroy')
-         ->middleware('role:admin');
+    Route::middleware('auth:sanctum')->group(function () {
 
+        // Categories
+        Route::apiResource('categories',
+            'App\Http\Controllers\CategoryController')
+            ->except(['destroy']);
+
+        Route::delete('categories/{category}',
+            'App\Http\Controllers\CategoryController@destroy')
+            ->middleware('role:admin');
+
+        // Items
+        Route::apiResource('items',
+            'App\Http\Controllers\ItemController')
+            ->except(['destroy']);
+
+        Route::delete('items/{item}',
+            'App\Http\Controllers\ItemController@destroy')
+            ->middleware('role:admin');
+    });
 });
-=======
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ItemController;
-
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('items', ItemController::class);
->>>>>>> origin/main
